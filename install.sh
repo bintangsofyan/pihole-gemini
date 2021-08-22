@@ -11,37 +11,45 @@ BLUE='\033[0;34m'
 echo -e "${GREEN}Install additional package${NOCOLOR}"
 apt install curl wget bash sudo keepalived libipset*
 
-echo -e "${GREEN}remove existing cloudflared${NOCOLOR}"
-sudo systemctl stop cloudflared
-sudo systemctl disable cloudflared
-sudo systemctl daemon-reload
-sudo deluser cloudflared
-sudo rm /etc/default/cloudflared
-sudo rm /etc/systemd/system/cloudflared.service
-sudo rm /usr/local/bin/cloudflared
+#echo -e "${GREEN}remove existing cloudflared${NOCOLOR}"
+#sudo systemctl stop cloudflared
+#sudo systemctl disable cloudflared
+#sudo systemctl daemon-reload
+#sudo deluser cloudflared
+#sudo rm /etc/default/cloudflared
+#sudo rm /etc/systemd/system/cloudflared.service
+#sudo rm /usr/local/bin/cloudflared
 
 echo -e "${GREEN}install cloudflared${NOCOLOR}"
-wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-sudo apt-get install ./cloudflared-linux-amd64.deb
-cloudflared -v
+wget -P /etc/cloudflared/ https://raw.githubusercontent.com/bintangsofyan/pihole-gemini/main/config.yml
+sudo cloudflared service install
 
-echo -e "${GREEN}adduser cloudflared${NOCOLOR}"
-sudo useradd -s /usr/sbin/nologin -r -M cloudflared
-
-echo -e "${GREEN}created /etc/default/cloudflared${NOCOLOR}"
-printf "#Commandline args for cloudflared, using Cloudflare DNS \nCLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query" >> /etc/default/cloudflared
-
-echo -e "${GREEN}Make chown /etc/default/cloudflared and /usr/local/bin/cloudflared${NOCOLOR}"
-sudo chown cloudflared:cloudflared /etc/default/cloudflared
-sudo chown cloudflared:cloudflared /usr/local/bin/cloudflared
-
-echo -e "${GREEN}created /etc/systemd/system/cloudflared.service${NOCOLOR}"
-printf "[Unit] \nDescription=cloudflared DNS over HTTPS proxy \nAfter=syslog.target network-online.target \n \n[Service] \nType=simple \nUser=cloudflared \nEnvironmentFile=/etc/default/cloudflared \nExecStart=/usr/local/bin/cloudflared proxy-dns $CLOUDFLARED_OPTS \nRestart=on-failure \nRestartSec=10 \nKillMode=process \n \n[Install] \nWantedBy=multi-user.target" >> /etc/systemd/system/cloudflared.service
-
-echo -e "${GREEN}Running Service Cloudflare${NOCOLOR}"
-sudo systemctl enable cloudflared
+echo -e "${GREEN}Start the systemd service and check its status:${NOCOLOR}"
 sudo systemctl start cloudflared
+sudo systemctl status cloudflared
+
+#wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+#sudo apt-get install ./cloudflared-linux-amd64.deb
+#cloudflared -v
+
+#echo -e "${GREEN}adduser cloudflared${NOCOLOR}"
+#sudo useradd -s /usr/sbin/nologin -r -M cloudflared
+
+#echo -e "${GREEN}created /etc/default/cloudflared${NOCOLOR}"
+#printf "#Commandline args for cloudflared, using Cloudflare DNS \nCLOUDFLARED_OPTS=--port 5053 --upstream https://1.1.1.1/dns-query --upstream https://1.0.0.1/dns-query" >> /etc/default/cloudflared
+
+#echo -e "${GREEN}Make chown /etc/default/cloudflared and /usr/local/bin/cloudflared${NOCOLOR}"
+#sudo chown cloudflared:cloudflared /etc/default/cloudflared
+#sudo chown cloudflared:cloudflared /usr/local/bin/cloudflared
+
+#echo -e "${GREEN}created /etc/systemd/system/cloudflared.service${NOCOLOR}"
+#printf "[Unit] \nDescription=cloudflared DNS over HTTPS proxy \nAfter=syslog.target network-online.target \n \n[Service] \nType=simple \nUser=cloudflared \nEnvironmentFile=/etc/default/cloudflared \nExecStart=/usr/local/bin/cloudflared proxy-dns $CLOUDFLARED_OPTS \nRestart=on-failure \nRestartSec=10 \nKillMode=process \n \n[Install] \nWantedBy=multi-user.target" >> /etc/systemd/system/cloudflared.service
+
+#echo -e "${GREEN}Running Service Cloudflare${NOCOLOR}"
+#sudo systemctl enable cloudflared
+#sudo systemctl start cloudflared
 #sudo systemctl status cloudflared
+
 
 #echo -e "${GREEN}back to root directory${NOCOLOR}"
 #cd /root/
