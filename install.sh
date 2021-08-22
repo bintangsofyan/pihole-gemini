@@ -26,7 +26,7 @@ sudo apt-get install ./cloudflared-linux-amd64.deb
 ${RED}cloudflared -v${NOCOLOR}
 
 wget -P /etc/cloudflared/ https://raw.githubusercontent.com/bintangsofyan/pihole-gemini/main/config.yml
-sudo cloudflared service install
+sudo cloudflared service install --legacy
 
 echo -e "${GREEN}Start the systemd service and check its status:${NOCOLOR}"
 sudo systemctl start cloudflared
