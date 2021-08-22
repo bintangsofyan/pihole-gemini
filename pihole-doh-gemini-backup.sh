@@ -111,7 +111,7 @@ sudo chmod 755 /etc/scripts/chk_ftl
 
 echo -e "${GREEN}setup keepalived${NOCOLOR}"
 #cd /etc/keepalived/
-wget -P etc/keepalived/ https://raw.githubusercontent.com/bintangsofyan/pihole-gemini/main/keepalived.conf
+wget -P /etc/keepalived/ https://raw.githubusercontent.com/bintangsofyan/pihole-gemini/main/keepalived.conf
 sudo systemctl restart keepalived.service
 
 cd /root/
