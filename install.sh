@@ -21,6 +21,10 @@ apt install curl wget bash sudo keepalived libipset*
 #sudo rm /usr/local/bin/cloudflared
 
 echo -e "${GREEN}install cloudflared${NOCOLOR}"
+wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+sudo apt-get install ./cloudflared-linux-amd64.deb
+${RED}cloudflared -v${NOCOLOR}
+
 wget -P /etc/cloudflared/ https://raw.githubusercontent.com/bintangsofyan/pihole-gemini/main/config.yml
 sudo cloudflared service install
 
