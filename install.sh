@@ -43,8 +43,8 @@ sudo systemctl enable cloudflared
 sudo systemctl start cloudflared
 #sudo systemctl status cloudflared
 
-echo -e "${GREEN}back to root directory${NOCOLOR}"
-cd /root/
+#echo -e "${GREEN}back to root directory${NOCOLOR}"
+#cd /root/
 
 echo -e "${GREEN}Uninstall Pi-Hole${NOCOLOR}"
 sudo pihole uninstall
@@ -115,4 +115,4 @@ wget -P /etc/keepalived/ https://raw.githubusercontent.com/bintangsofyan/pihole-
 sudo systemctl restart keepalived.service
 
 cd /root/
-sudo rm*
+sudo rm *
